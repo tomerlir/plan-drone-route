@@ -9,6 +9,8 @@ import toast, { Toaster } from "react-hot-toast";
 function App() {
   const [markerData, setMarkerData] = useState([]);
   const [saveClicked, setSaveClicked] = useState(false);
+  const [deleteRoute, setDeleteRoute] = useState(false);
+  const [routeDeleted, setRouteDeleted] = useState(false);
   const [routeName, setRouteName] = useState(null);
   const [loadRoute, setLoadRoute] = useState(null);
   const [routeNames, setRouteNames] = useState([]);
@@ -22,7 +24,8 @@ function App() {
   const buttonClicked = (action) => {
     if (action === "submit") {
       setSaveClicked(true);
-      toast.success("Route saved successfully", {
+
+      toast.success(`Route saved successfully`, {
         autoClose: 3000,
       });
     } else if (action === "cancel") {
@@ -33,12 +36,17 @@ function App() {
     } else if (action === "clear") {
       setCleanUpMap(true);
       setLoadRoute(null);
-      // delete local storage:
-      // localStorage.clear();
       toast.success("Map cleared successfully", {
         autoClose: 3000,
       });
     }
+  };
+
+  const deleteButtonClicked = (route) => {
+    setDeleteRoute(route.label);
+    toast.success(`${route.label} deleted successfully`, {
+      autoClose: 3000,
+    });
   };
 
   const cancelButtonClicked = () => {
@@ -68,7 +76,7 @@ function App() {
         (element) => element.label === routeName
       );
 
-      if (index > 0) {
+      if (index !== -1) {
         const updatedRouteNames = [...routeNames];
         updatedRouteNames[index].value = markerData;
         setRouteNames(updatedRouteNames);
@@ -93,7 +101,7 @@ function App() {
   ]);
 
   useEffect(() => {
-    if (localStorage.length) {
+    if (localStorage.length || routeDeleted) {
       let ls = [];
       for (let i = 0; i < localStorage.length; i++) {
         ls.push({
@@ -102,8 +110,19 @@ function App() {
         });
       }
       setRouteNames(ls);
+      setLoadRoute(null);
+      setRouteDeleted(false);
     }
-  }, [setRouteNames]);
+  }, [setRouteNames, routeDeleted]);
+
+  useEffect(() => {
+    if (deleteRoute) {
+      localStorage.removeItem(deleteRoute);
+      setRouteDeleted(true);
+      setDeleteRoute(null);
+      setCleanUpMap(true);
+    }
+  }, [deleteRoute, setRouteDeleted]);
 
   return (
     <Fragment>
@@ -136,6 +155,7 @@ function App() {
               <LoadRouteCard
                 loadRouteName={loadRouteName}
                 routeNames={routeNames}
+                deleteButtonClicked={deleteButtonClicked}
               ></LoadRouteCard>
             </Row>
           </Col>

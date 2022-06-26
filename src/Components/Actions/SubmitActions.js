@@ -8,7 +8,13 @@ import {
   Row,
   Col,
   UncontrolledTooltip,
+  FormText,
 } from "reactstrap";
+import ConfirmationModal from "./Modals/ConfirmationModal";
+
+const getDifference = (loadedMarkers, markers) => {
+  return loadedMarkers?.length !== markers?.length;
+};
 
 const SubmitActions = ({
   buttonClicked,
@@ -17,24 +23,46 @@ const SubmitActions = ({
   loadRoute,
 }) => {
   const [nameValue, setNameValue] = useState("");
+  const [submitButtonAction, setSubmitButtonAction] = useState("Submit");
+  const [dataUpdated, setDataUpdated] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [modalAction, setModalAction] = useState(null);
 
   const handleButtonClick = (action) => {
     buttonClicked(action);
-    if(action === "clear"){
+    if (action === "clear") {
       setNameValue("");
+      setOpenModal(!openModal);
     }
+  };
+
+  const handleOpenModal = (action) => {
+    setOpenModal(!openModal);
+    setModalAction(action);
   };
 
   useEffect(() => {
     if (loadRoute) {
       setNameValue(loadRoute.label);
+      setSubmitButtonAction("Update");
+    } else {
+      setDataUpdated(true);
+      setSubmitButtonAction("Submit");
+      setNameValue("");
     }
-  }, [loadRoute, setNameValue]);
+  }, [loadRoute, setNameValue, setSubmitButtonAction]);
+
+  useEffect(() => {
+    if (loadRoute && markerData) {
+      setDataUpdated(getDifference(loadRoute?.value, markerData));
+    }
+  }, [setDataUpdated, loadRoute, markerData]);
 
   const handleSubmit = (e) => {
     handleButtonClick("submit");
     submitRouteName(nameValue);
     setNameValue("");
+    setDataUpdated(false);
     e.preventDefault();
   };
 
@@ -52,14 +80,16 @@ const SubmitActions = ({
                 id="name"
                 name="name"
                 maxLength={55}
-                placeholder="Insert a name for the route"
+                placeholder="Insert a name"
                 value={nameValue}
                 onChange={(e) => {
                   setNameValue(e.target.value);
                 }}
+                readOnly={submitButtonAction === "Update"}
               />
-              {/* <FormText>
-              </FormText> */}
+              {submitButtonAction === "Update" && (
+                <FormText>Update name will be available soon</FormText>
+              )}
             </Col>
           </FormGroup>
         </Row>
@@ -68,9 +98,10 @@ const SubmitActions = ({
             <Button
               className="clear-btn"
               color="danger"
-              onClick={() => handleButtonClick("clear")}
+              onClick={() => handleOpenModal("Clear")}
+              disabled={markerData.length < 1}
             >
-              Clear Map
+              Clear
             </Button>
           </Col>
           <Col sm={4} className="p-2">
@@ -78,35 +109,49 @@ const SubmitActions = ({
               className="cancel-btn"
               color="warning"
               onClick={() => handleButtonClick("cancel")}
+              disabled={markerData.length < 1}
             >
               Cancel
             </Button>
           </Col>
           <Col sm={4} className="p-2">
-            <span id="UncontrolledTooltipExample">
+            <span id="ActionTooltip">
               <Button
                 className="submit-btn"
                 color="primary"
                 type="submit"
-                disabled={!nameValue || markerData.length < 2}
+                disabled={!nameValue || markerData.length < 2 || !dataUpdated}
               >
-                Submit
+                {submitButtonAction}
               </Button>
             </span>
 
             {(!nameValue || markerData.length < 2) && (
               <UncontrolledTooltip
                 placement="bottom"
-                target="UncontrolledTooltipExample"
+                target="ActionTooltip"
                 fade={true}
               >
-                A name and at least 2 points for the route are required to
-                submit
+                At least 2 points and a name are required to submit
+              </UncontrolledTooltip>
+            )}
+            {submitButtonAction === "Update" && !dataUpdated && (
+              <UncontrolledTooltip
+                placement="bottom"
+                target="ActionTooltip"
+                fade={true}
+              >
+                A change is required to update
               </UncontrolledTooltip>
             )}
           </Col>
         </Row>
       </Form>
+      <ConfirmationModal
+        openModal={openModal}
+        modalAction={modalAction}
+        handleConfirmClick={() => handleButtonClick("clear")}
+      ></ConfirmationModal>
     </Fragment>
   );
 };
