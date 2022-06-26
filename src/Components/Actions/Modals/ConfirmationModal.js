@@ -3,6 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 const ConfirmationModal = ({ openModal, modalAction, handleConfirmClick }) => {
   const [show, setShow] = useState(false);
+  const [actionColor, setActionColor] = useState("primary");
 
   // pass confirmed to parent
   const handleConfirm = (confirmation) => {
@@ -14,8 +15,10 @@ const ConfirmationModal = ({ openModal, modalAction, handleConfirmClick }) => {
   useEffect(() => {
     if (openModal) {
       setShow(true);
+      if (modalAction === "Delete" || modalAction === "Clear")
+        setActionColor("danger");
     }
-  }, [openModal, setShow]);
+  }, [openModal, setShow, modalAction, setActionColor]);
 
   return (
     <Fragment>
@@ -28,10 +31,10 @@ const ConfirmationModal = ({ openModal, modalAction, handleConfirmClick }) => {
             className="close-modal"
             onClick={() => handleConfirm(false)}
           >
-            Close
+            Cancel
           </Button>
           <Button
-            color={modalAction === "Delete" ? "danger" : "primary"}
+            color={actionColor}
             className="confirm-action"
             onClick={() => handleConfirm(true)}
           >
