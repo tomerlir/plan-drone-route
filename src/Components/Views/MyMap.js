@@ -5,6 +5,7 @@ import {
   useMapEvents,
   Marker,
   Polyline,
+  useMap,
 } from "react-leaflet";
 import L from "leaflet";
 
@@ -35,8 +36,9 @@ const lastIcon = L.icon({
   shadowUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
 });
+
 // use the map event to save the marker's location
-function MyMarkers({ saveMarkers }) {
+const MyMarkers = ({ saveMarkers }) => {
   useMapEvents({
     click: (e) => {
       const { lat, lng } = e.latlng;
@@ -45,7 +47,18 @@ function MyMarkers({ saveMarkers }) {
   });
 
   return null;
-}
+};
+
+const ChangeView = ({ bounds }) => {
+  const map = useMap();
+  if (bounds) {
+    let myZoom = map.getBoundsZoom(bounds);
+    let myCenter = bounds.getCenter();
+    map.flyTo(myCenter, myZoom - 1);
+  }
+
+  return null;
+};
 
 const MyMap = ({
   childToParent,
@@ -61,12 +74,25 @@ const MyMap = ({
   // save the marker and polyline positions
   const [markers, setMarkers] = useState([]);
   const [polylines, setPolylines] = useState([]);
+  const [bounds, setBounds] = useState(null);
 
   // function to store markers
   const saveMarkers = (newMarkerCoords) => {
     // spreading the previous state in order to keep consistent array structure
     setMarkers((prevState) => [...prevState, newMarkerCoords]);
   };
+
+  useEffect(() => {
+    if (markers.length > 0) {
+      let MyBounds = L.latLngBounds(
+        markers.map((marker) => [marker.lat, marker.lng])
+      );
+      setBounds(MyBounds);
+    } else {
+      let MyBounds = L.latLngBounds([{ lat: 46.5191, lng: 6.5668 }]);
+      setBounds(MyBounds);
+    }
+  }, [markers, setBounds]);
 
   useEffect(() => {
     // polyline needed if more than 2 markers
@@ -86,7 +112,6 @@ const MyMap = ({
 
   useEffect(() => {
     if (loadRoute) {
-      console.log("loadRoute", loadRoute);
       setMarkers(loadRoute.value);
       setPolylines([loadRoute.value]);
     }
@@ -100,7 +125,6 @@ const MyMap = ({
       clearButtonClicked();
     }
   }, [cleanUpMap, setMarkers, setPolylines, clearButtonClicked]);
-
 
   useEffect(() => {
     if (removeLastPoint) {
@@ -126,6 +150,8 @@ const MyMap = ({
       scrollWheelZoom={true}
       style={{ height: "80vh" }}
     >
+      <ChangeView bounds={bounds} />
+
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

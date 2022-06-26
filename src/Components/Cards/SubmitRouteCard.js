@@ -13,12 +13,12 @@ const SubmitRouteCard = ({
       <CardHeader>Route Planner Actions</CardHeader>
       <CardBody>
         <CardTitle tag="h5" className="mb-3">
-          You may clear all saved routes, and cancel or submit your drawn route
+          Submit your route
         </CardTitle>
         <SubmitActions
           buttonClicked={buttonClicked}
           submitRouteName={submitRouteName}
-          markerData={markerData}  
+          markerData={markerData}
           loadRoute={loadRoute}
         ></SubmitActions>
       </CardBody>
