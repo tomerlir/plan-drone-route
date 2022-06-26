@@ -20,6 +20,7 @@ const LoadActions = ({ loadRouteName, routeNames, deleteButtonClicked }) => {
     setSelectedRoute(name);
   };
 
+  // pass submit action to parent
   const handleSubmit = (e) => {
     loadRouteName(selectedRoute);
     setSelectedRoute(null);
@@ -27,6 +28,7 @@ const LoadActions = ({ loadRouteName, routeNames, deleteButtonClicked }) => {
     e.preventDefault();
   };
 
+  // pass delete action to parent
   const handleDelete = (confirm) => {
     if (confirm) {
       deleteButtonClicked(selectedRoute);
@@ -35,6 +37,7 @@ const LoadActions = ({ loadRouteName, routeNames, deleteButtonClicked }) => {
     setOpenModal(!openModal);
   };
 
+  // toggle the modal
   const handleOpenModal = (action) => {
     setOpenModal(!openModal);
     setModalAction(action);

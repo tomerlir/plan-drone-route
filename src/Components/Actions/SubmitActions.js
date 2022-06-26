@@ -12,6 +12,7 @@ import {
 } from "reactstrap";
 import ConfirmationModal from "./Modals/ConfirmationModal";
 
+// check if any new markers have been added or removed 
 const getDifference = (loadedMarkers, markers) => {
   return loadedMarkers?.length !== markers?.length;
 };
@@ -28,6 +29,7 @@ const SubmitActions = ({
   const [openModal, setOpenModal] = useState(false);
   const [modalAction, setModalAction] = useState(null);
 
+  // pass action to parent
   const handleButtonClick = (action) => {
     buttonClicked(action);
     if (action === "clear") {
@@ -36,11 +38,13 @@ const SubmitActions = ({
     }
   };
 
+  // toggle the modal
   const handleOpenModal = (action) => {
     setOpenModal(!openModal);
     setModalAction(action);
   };
 
+  // check if user is going through update or submit workflow
   useEffect(() => {
     if (loadRoute) {
       setNameValue(loadRoute.label);
@@ -52,12 +56,14 @@ const SubmitActions = ({
     }
   }, [loadRoute, setNameValue, setSubmitButtonAction]);
 
+  // check if data is updated or same
   useEffect(() => {
     if (loadRoute && markerData) {
       setDataUpdated(getDifference(loadRoute?.value, markerData));
     }
   }, [setDataUpdated, loadRoute, markerData]);
 
+  // pass the submit with the route name to the parent
   const handleSubmit = (e) => {
     handleButtonClick("submit");
     submitRouteName(nameValue);

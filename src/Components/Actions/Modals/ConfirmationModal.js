@@ -4,11 +4,13 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 const ConfirmationModal = ({ openModal, modalAction, handleConfirmClick }) => {
   const [show, setShow] = useState(false);
 
+  // pass confirmed to parent
   const handleConfirm = (confirmation) => {
     handleConfirmClick(confirmation);
     setShow(false);
   };
 
+  // check if user has opened modal
   useEffect(() => {
     if (openModal) {
       setShow(true);
