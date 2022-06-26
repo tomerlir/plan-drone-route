@@ -1,70 +1,32 @@
-# Getting Started with Create React App
+# Plan Drone Route Web Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Cloning the Repository
 
-## Available Scripts
+In terminal, navigate your current directory to the location where you would like the cloned directory. Type the following
+`git clone`
+followed by pasting the repository link that can be copied via the green button labeled Code (top-right).
+Once the repository has been cloned locally, you must navigate into it by typing
+`cd plan-drone-route`
+into your terminal
 
-In the project directory, you can run:
+### Preparing Environment
 
-### `npm start`
+To run, please ensure you have the latest versions of npm and node installed.
+You may navigate to https://nodejs.org/en/download/ and follow their instructions. Ensure it has been properly installed by running the following commands in your terminal.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
+node -v
+npm -v
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Once that is done successfully, make sure you are in the right directory where the web application has been cloned, and run `npm install` .
+This may need some time to finish running.
 
-### `npm test`
+### Running the Web Application
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In the same directory aforementioned, run the command
+`npm start`
+in order to start the "Plan Drone Route" Web Application. Once the command is done running, the app will open on your local host on your default browser at the following url
+`http://localhost:3000/`
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+You may now start drawing routes and exploring the functionality directly on your browser. Happy drawing!

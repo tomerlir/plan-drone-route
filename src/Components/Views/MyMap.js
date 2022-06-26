@@ -49,6 +49,7 @@ const MyMarkers = ({ saveMarkers }) => {
   return null;
 };
 
+// recenter map based on coordinates
 const ChangeView = ({ bounds }) => {
   const map = useMap();
   if (bounds) {
@@ -61,7 +62,7 @@ const ChangeView = ({ bounds }) => {
 };
 
 const MyMap = ({
-  childToParent,
+  handleMarkerData,
   cleanUpMap,
   clearButtonClicked,
   loadRoute,
@@ -71,17 +72,18 @@ const MyMap = ({
   // map starting coordinates to Polytechnique Federale de Lausanne
   const startPosition = [46.5191, 6.5668];
 
-  // save the marker and polyline positions
+  // save the marker, boundaries, and polyline positions
   const [markers, setMarkers] = useState([]);
   const [polylines, setPolylines] = useState([]);
   const [bounds, setBounds] = useState(null);
 
-  // function to store markers
+  // store marker coordinates in state
   const saveMarkers = (newMarkerCoords) => {
     // spreading the previous state in order to keep consistent array structure
     setMarkers((prevState) => [...prevState, newMarkerCoords]);
   };
 
+  // setting the boundaries
   useEffect(() => {
     if (markers.length > 0) {
       let MyBounds = L.latLngBounds(
@@ -94,6 +96,7 @@ const MyMap = ({
     }
   }, [markers, setBounds]);
 
+  // setting the polylines
   useEffect(() => {
     // polyline needed if more than 2 markers
     if (markers.length > 1) {
@@ -107,9 +110,10 @@ const MyMap = ({
 
   // pass the marker data on submit to parent
   useEffect(() => {
-    childToParent(markers);
-  }, [markers, childToParent]);
+    handleMarkerData(markers);
+  }, [markers, handleMarkerData]);
 
+  // load route from routes
   useEffect(() => {
     if (loadRoute) {
       setMarkers(loadRoute.value);
@@ -117,7 +121,7 @@ const MyMap = ({
     }
   }, [setMarkers, loadRoute]);
 
-  // check if user cancels route and reset all values
+  // check if user clicked to clear map
   useEffect(() => {
     if (cleanUpMap) {
       setMarkers([]);
@@ -126,6 +130,7 @@ const MyMap = ({
     }
   }, [cleanUpMap, setMarkers, setPolylines, clearButtonClicked]);
 
+  // handle cancel functionality by removing last element in array
   useEffect(() => {
     if (removeLastPoint) {
       let myMarkers = markers.slice(0, -1);

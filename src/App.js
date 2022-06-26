@@ -17,10 +17,12 @@ function App() {
   const [cleanUpMap, setCleanUpMap] = useState(false);
   const [removeLastPoint, setRemoveLastPoint] = useState(false);
 
-  const childToParent = (data) => {
+  // store the marker coordinates
+  const handleMarkerData = (data) => {
     setMarkerData(data);
   };
 
+  // check which action has been done in submit child component
   const buttonClicked = (action) => {
     if (action === "submit") {
       setSaveClicked(true);
@@ -69,18 +71,22 @@ function App() {
     });
   };
 
+  // check if user wants to save marker coordinates
   useEffect(() => {
     if (saveClicked) {
       localStorage.setItem(routeName, JSON.stringify(markerData));
+      // since using local storage and not an actual server, will do a simple check if name alreeady exists
       const index = routeNames.findIndex(
         (element) => element.label === routeName
       );
 
+      // and update that key with the new data
       if (index !== -1) {
         const updatedRouteNames = [...routeNames];
         updatedRouteNames[index].value = markerData;
         setRouteNames(updatedRouteNames);
       } else {
+        // or if doesn't already exist add a new object to local storage
         setRouteNames((prevState) => [
           ...prevState,
           { label: routeName, value: markerData },
@@ -100,6 +106,7 @@ function App() {
     routeNames,
   ]);
 
+  // check for changes in local storage and if a route has been deleted to update loadable routes
   useEffect(() => {
     if (localStorage.length || routeDeleted) {
       let ls = [];
@@ -115,6 +122,7 @@ function App() {
     }
   }, [setRouteNames, routeDeleted]);
 
+  // check if user click to remove a route
   useEffect(() => {
     if (deleteRoute) {
       localStorage.removeItem(deleteRoute);
@@ -128,13 +136,13 @@ function App() {
     <Fragment>
       <Toaster position="bottom-right" reverseOrder={false} />
       <Container fluid>
-        <Row className="text-center">
+        <Row className="text-center mt-3">
           <h1>Drone Route Planner</h1>
         </Row>
         <Row className="p-3">
           <Col sm={8} className="mb-3">
             <MyMap
-              childToParent={childToParent}
+              handleMarkerData={handleMarkerData}
               cleanUpMap={cleanUpMap}
               clearButtonClicked={clearButtonClicked}
               removeLastPoint={removeLastPoint}

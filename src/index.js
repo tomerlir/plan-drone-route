@@ -6,7 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // removed StrictMode because findDOMNode was producing a client-side error due to the depreciated reactstrap library component - uncontrolled tooltip
+  // removed StrictMode because findDOMNode was producing a client-side error 
+  // due to the depreciated reactstrap library component - uncontrolled tooltip
   // <React.StrictMode>
   <App />
   // </React.StrictMode>
